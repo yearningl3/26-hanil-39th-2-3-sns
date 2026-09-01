@@ -150,19 +150,6 @@
       margin-top: 0.6rem;
     }
 
-    /* PWA 설치 권유 배너 */
-    #pwaInstallBanner {
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 0.7rem 1rem;
-      margin-bottom: 1rem;
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-    }
-
     /* 인증 폼 */
     .auth-container { max-width: 420px; margin: 3rem auto; background: var(--card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); }
     .auth-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.2rem; text-align: center; color: var(--primary); }
@@ -223,28 +210,47 @@
     .author-link { color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.8rem; }
     .author-link:hover { text-decoration: underline; }
 
-    /* 인스타그램 인앱 뷰어 카드 */
-    .insta-app-card {
+    /* 파워링크(PowerLink) 카드 스타일 */
+    .power-link-card {
       margin: 0.8rem 0;
-      background: #fdf2f8;
-      border: 1px solid #fbcfe8;
-      border-radius: 10px;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
       padding: 0.8rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 0.8rem;
     }
-    .insta-app-card-title {
+    .power-link-card.insta {
+      border-left-color: #ec4899;
+      background: #fdf2f8;
+    }
+    .power-link-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+    }
+    .power-link-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #9d174d;
+      gap: 5px;
     }
-    .insta-app-open-btn {
-      background: var(--insta-grad);
+    .power-link-url {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 380px;
+    }
+    .power-link-btn {
+      background: var(--primary);
       color: #fff;
       border: none;
       padding: 5px 12px;
@@ -253,12 +259,67 @@
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .power-link-btn.insta {
+      background: var(--insta-grad);
     }
 
-    .post-link {
-      color: var(--primary);
-      text-decoration: underline;
-      cursor: pointer;
+    /* 앱 내 전체화면 인앱 브라우저 뷰어 탭 */
+    #tab-inapp-viewer {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      height: 78vh;
+      display: none;
+      flex-direction: column;
+    }
+    #tab-inapp-viewer.active {
+      display: flex;
+    }
+    .inapp-nav-bar {
+      background: #0f172a;
+      color: #fff;
+      padding: 0.5rem 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .inapp-url-pill {
+      background: #1e293b;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+    .inapp-frame-container {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #ffffff;
+    }
+    .inapp-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .inapp-disclaimer-banner {
+      background: #fffbeb;
+      color: #92400e;
+      border-bottom: 1px solid #fef3c7;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     /* 좋아요 및 댓글 UI */
@@ -338,32 +399,6 @@
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 200; padding: 1rem; }
     .modal-content { background: white; border-radius: 12px; width: 100%; max-width: 460px; padding: 1.5rem; }
 
-    /* 인앱 전용 브라우저 모달 */
-    .inapp-browser-modal {
-      width: 100%;
-      max-width: 520px;
-      height: 80vh;
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      overflow: hidden;
-    }
-    .inapp-browser-header {
-      background: #1e293b;
-      color: #fff;
-      padding: 0.6rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-    }
-    .inapp-browser-frame {
-      flex: 1;
-      width: 100%;
-      border: none;
-      background: #fafafa;
-    }
-
     /* 상태 표시 바 */
     #systemStatusBar {
       position: fixed;
@@ -436,20 +471,14 @@
   <!-- 2. 메인 서비스 화면 -->
   <div id="mainServiceSection" style="display: none;">
     <nav>
-      <button class="active" onclick="switchTab('board', this)">📢 통합 게시판</button>
-      <button onclick="switchTab('chat', this)">💬 실시간 톡</button>
-      <button onclick="switchTab('calendar', this)">📅 학급 캘린더</button>
+      <button id="nav-board-btn" class="active" onclick="switchTab('board', this)">📢 통합 게시판</button>
+      <button id="nav-chat-btn" onclick="switchTab('chat', this)">💬 실시간 톡</button>
+      <button id="nav-cal-btn" onclick="switchTab('calendar', this)">📅 학급 캘린더</button>
     </nav>
 
     <main>
-      <!-- PWA 앱 설치 유도 배너 -->
-      <div id="pwaInstallBanner">
-        <span>📲 <strong>한일 2-3 전용 앱</strong>으로 설치하여 편리하게 이용하세요!</span>
-        <button class="btn" style="padding:4px 10px; font-size:0.75rem;" onclick="triggerPwaInstall()">앱 설치</button>
-      </div>
-
       <!-- 스토리 영역 -->
-      <div class="stories-container">
+      <div class="stories-container" id="storiesMainSection">
         <div class="story-item" onclick="openModal('storyModal')">
           <div class="story-ring" style="background:#2563eb;">
             <div class="story-avatar-default" style="font-size:1.3rem;">+</div>
@@ -503,21 +532,25 @@
           <div class="cal-grid" id="calendarCells"></div>
         </div>
       </section>
-    </main>
-  </div>
 
-  <!-- 인앱 전용 브라우저 뷰어 모달 -->
-  <div class="modal-backdrop" id="inAppBrowserModal">
-    <div class="modal-content inapp-browser-modal">
-      <div class="inapp-browser-header">
-        <span id="inAppBrowserTitle">인앱 뷰어</span>
-        <div style="display:flex; gap:0.4rem;">
-          <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.75rem;" onclick="openStandalonePopup()">단독 창 열기</button>
-          <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.75rem; color:var(--notice-red);" onclick="closeModal('inAppBrowserModal')">✕ 닫기</button>
+      <!-- 4. 앱 내 단일 웹 브라우저 탭 (파워링크 인앱 뷰어) -->
+      <section id="tab-inapp-viewer" class="tab-view">
+        <div class="inapp-nav-bar">
+          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="closeInAppViewer()">◀ 돌아가기</button>
+          <div class="inapp-url-pill" id="inAppViewerUrlPill">웹페이지 연결 중...</div>
+          <div style="display:flex; gap:4px;">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="reloadInAppViewer()">↻</button>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="openExternalRoute()">우회 채널</button>
+          </div>
         </div>
-      </div>
-      <iframe id="inAppBrowserFrame" class="inapp-browser-frame" src=""></iframe>
-    </div>
+        <div class="inapp-disclaimer-banner">
+          <span>🛡️ 이 웹페이지는 외부에서 제공됩니다. 개인정보 입력에 유의하세요.</span>
+        </div>
+        <div class="inapp-frame-container">
+          <iframe id="mainInAppFrame" class="inapp-iframe" src=""></iframe>
+        </div>
+      </section>
+    </main>
   </div>
 
   <!-- 프로필 상세 조회 모달 -->
@@ -579,8 +612,8 @@
           <input type="text" id="postTitle" placeholder="제목을 입력하세요" required />
         </div>
         <div class="form-group">
-          <label>내용</label>
-          <textarea id="postContent" rows="5" style="width:100%; padding:0.5rem; border:1px solid var(--border); border-radius:6px;" placeholder="내용을 작성하세요." required></textarea>
+          <label>내용 (링크 입력 시 파워링크 카드로 자동 변환)</label>
+          <textarea id="postContent" rows="5" style="width:100%; padding:0.5rem; border:1px solid var(--border); border-radius:6px;" placeholder="내용을 작성하세요. (링크 포함 가능)" required></textarea>
         </div>
         <div style="display:flex; justify-content:flex-end; gap:0.5rem;">
           <button type="button" class="btn btn-secondary" onclick="closeModal('writeModal')">취소</button>
@@ -700,32 +733,15 @@
 
   <script>
     // =========================================================================
-    // 0. 서비스 워커 등록 (PWA 기능 활성화)
+    // 0. PWA 및 상태 유틸리티
     // =========================================================================
-    let deferredPrompt = null;
     let currentInAppUrl = '';
+    let previousActiveTab = 'board';
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
       });
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const banner = document.getElementById('pwaInstallBanner');
-      if (banner) banner.style.display = 'flex';
-    });
-
-    function triggerPwaInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-          document.getElementById('pwaInstallBanner').style.display = 'none';
-        });
-      }
     }
 
     function updateSystemStatus(text, color = "#10b981") {
@@ -811,48 +827,77 @@
     let tempProfilePhotoBase64 = null;
 
     // =========================================================================
-    // 3. 인앱 브라우저 및 인스타그램 뷰어 유틸
+    // 3. 파워링크 엔진 및 인앱 단일 뷰어 라우터
     // =========================================================================
-    function openInAppBrowser(url, title = "인앱 브라우저") {
+    function openInAppViewer(url) {
       currentInAppUrl = url;
-      document.getElementById('inAppBrowserTitle').textContent = title;
-      document.getElementById('inAppBrowserFrame').src = url;
-      openModal('inAppBrowserModal');
+      document.getElementById('inAppViewerUrlPill').textContent = url;
+      document.getElementById('mainInAppFrame').src = url;
+
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-inapp-viewer').classList.add('active');
+      document.getElementById('storiesMainSection').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openStandalonePopup() {
+    function closeInAppViewer() {
+      document.getElementById('mainInAppFrame').src = '';
+      document.getElementById('tab-inapp-viewer').classList.remove('active');
+      document.getElementById('storiesMainSection').style.display = 'flex';
+      switchTab(previousActiveTab);
+    }
+
+    function reloadInAppViewer() {
+      const frame = document.getElementById('mainInAppFrame');
+      if (frame && currentInAppUrl) frame.src = currentInAppUrl;
+    }
+
+    function openExternalRoute() {
       if (!currentInAppUrl) return;
-      window.open(
-        currentInAppUrl, 
-        '_blank', 
-        'location=no,menubar=no,toolbar=no,status=no,scrollbars=yes,resizable=yes,width=480,height=720'
-      );
+      // Tapo 스타일 우회: YouTube 검색 허용 채널을 통한 경유 또는 새 독립 세션
+      if (currentInAppUrl.includes('instagram.com')) {
+        const query = encodeURIComponent(currentInAppUrl);
+        const bypassUrl = `https://www.google.com/url?q=${query}`;
+        window.open(bypassUrl, '_blank');
+      } else {
+        window.open(currentInAppUrl, '_blank');
+      }
     }
 
+    // 본문 내 모든 URL을 파워링크(PowerLink) 카드로 자동 치환
     function formatPostContent(rawText) {
       if (!rawText) return '';
 
       let escaped = escapeHtml(rawText);
 
-      // 인스타그램 URL 감지 정규식
-      const instaRegex = /(https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel|tv)\/([a-zA-Z0-9_\-]+)\/?(?:\S*))/gi;
-
-      escaped = escaped.replace(instaRegex, (match, fullUrl) => {
+      // 1. 인스타그램 파워링크
+      const instaRegex = /(https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel|tv|[a-zA-Z0-9_\.]+)\/?(?:\S*))/gi;
+      escaped = escaped.replace(instaRegex, (url) => {
         return `
-          <div class="insta-app-card">
-            <div class="insta-app-card-title">
-              <span>📸 Instagram 게시물</span>
+          <div class="power-link-card insta">
+            <div class="power-link-info">
+              <div class="power-link-title"><span>📸 Instagram 파워링크</span></div>
+              <div class="power-link-url">${url}</div>
             </div>
-            <button class="insta-app-open-btn" onclick="openInAppBrowser('${fullUrl}', 'Instagram 피드')">앱 내에서 열기 ▶</button>
+            <button class="power-link-btn insta" onclick="openInAppViewer('${url}')">앱에서 열기 ▶</button>
           </div>
         `;
       });
 
-      // 일반 링크 처리
+      // 2. 일반 웹사이트/유튜브 파워링크
       const generalUrlRegex = /(?<!href=["'])(https?:\/\/[^\s<]+)(?![^<]*>)/gi;
       escaped = escaped.replace(generalUrlRegex, (url) => {
-        if (url.includes('instagram.com/p/') || url.includes('instagram.com/reel/')) return url;
-        return `<span class="post-link" onclick="openInAppBrowser('${url}', '웹 뷰어')">${url}</span>`;
+        if (url.includes('instagram.com')) return url;
+        const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
+        return `
+          <div class="power-link-card">
+            <div class="power-link-info">
+              <div class="power-link-title"><span>${isYoutube ? '🎬 YouTube 파워링크' : '🔗 파워링크'}</span></div>
+              <div class="power-link-url">${url}</div>
+            </div>
+            <button class="power-link-btn" onclick="openInAppViewer('${url}')">열기 ▶</button>
+          </div>
+        `;
       });
 
       return escaped;
@@ -1118,7 +1163,7 @@
       if (prof.instagramHandle) {
         const instaUrl = `https://instagram.com/${prof.instagramHandle}`;
         instaArea.innerHTML = `
-          <button class="btn-insta" onclick="openInAppBrowser('${instaUrl}', '@${prof.instagramHandle} 프로필')">
+          <button class="btn-insta" onclick="closeModal('profileModal'); openInAppViewer('${instaUrl}');">
             <span>📸 Instagram: @${prof.instagramHandle}</span>
           </button>
         `;
@@ -1143,7 +1188,7 @@
     }
 
     // =========================================================================
-    // 8. 통합 게시판 (인앱 브라우저 연동 + 글 수정/삭제 + 좋아요/댓글)
+    // 8. 통합 게시판 (파워링크 + 글 수정/삭제 + 좋아요/댓글)
     // =========================================================================
     function openWriteModal(categoryMode = 'free') {
       const isLeader = myProfile.role === '반장' || myProfile.role === '부반장';
@@ -1802,13 +1847,23 @@
     }
 
     // =========================================================================
-    // 12. 탭 및 공통 모달 유틸리티
+    // 12. 탭 전환 및 모달 유틸리티
     // =========================================================================
-    function switchTab(tabKey, btn) {
+    function switchTab(tabKey, btn = null) {
+      previousActiveTab = tabKey;
       document.querySelectorAll('.tab-view').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      document.getElementById(`tab-${tabKey}`).classList.add('active');
-      btn.classList.add('active');
+      
+      const targetView = document.getElementById(`tab-${tabKey}`);
+      if (targetView) targetView.classList.add('active');
+
+      if (btn) {
+        btn.classList.add('active');
+      } else {
+        const navBtn = document.getElementById(`nav-${tabKey}-btn`);
+        if (navBtn) navBtn.classList.add('active');
+      }
+
       if (tabKey === 'calendar') renderCalendar();
     }
 
@@ -1816,10 +1871,6 @@
     function closeModal(id) {
       document.getElementById(id).style.display = 'none';
       if (id === 'storyViewerModal') currentViewingStory = null;
-      if (id === 'inAppBrowserModal') {
-        document.getElementById('inAppBrowserFrame').src = '';
-        currentInAppUrl = '';
-      }
     }
 
     function escapeHtml(str) {
