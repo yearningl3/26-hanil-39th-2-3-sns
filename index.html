@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>한일고등학교 2학년 3반 커뮤니티</title>
 
+  <!-- PWA 매니페스트 및 모바일 앱 설정 -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#1e40af" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -12,6 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3820/3820331.png" />
 
+  <!-- 파이어베이스 SDK 로드 -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -196,7 +198,7 @@
     .story-avatar-default { width: 100%; height: 100%; border-radius: 50%; background: #e0e7ff; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary); border: 2px solid white; font-size: 0.9rem; }
     .story-user { font-size: 0.75rem; color: var(--text); }
 
-    /* 게시판 스타일 (줄바꿈 오류 완전 해결) */
+    /* 게시판 스타일 */
     .board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
     .filter-btn-group { display: flex; gap: 0.3rem; }
     .filter-btn { padding: 0.35rem 0.75rem; border: 1px solid var(--border); background: white; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
@@ -221,8 +223,8 @@
     .author-link { color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.8rem; }
     .author-link:hover { text-decoration: underline; }
 
-    /* 스마트 인스타그램 링크 카드 (차단 오류 방지) */
-    .insta-smart-card {
+    /* 인스타그램 인앱 뷰어 카드 */
+    .insta-app-card {
       margin: 0.8rem 0;
       background: #fdf2f8;
       border: 1px solid #fbcfe8;
@@ -233,7 +235,7 @@
       justify-content: space-between;
       gap: 0.8rem;
     }
-    .insta-card-info {
+    .insta-app-card-title {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -241,22 +243,22 @@
       font-weight: 600;
       color: #9d174d;
     }
-    .insta-link-btn {
+    .insta-app-open-btn {
       background: var(--insta-grad);
       color: #fff;
-      text-decoration: none;
-      padding: 4px 10px;
+      border: none;
+      padding: 5px 12px;
       border-radius: 6px;
       font-size: 0.75rem;
       font-weight: 700;
+      cursor: pointer;
       white-space: nowrap;
     }
 
     .post-link {
       color: var(--primary);
       text-decoration: underline;
-      word-break: break-all;
-      overflow-wrap: anywhere;
+      cursor: pointer;
     }
 
     /* 좋아요 및 댓글 UI */
@@ -336,6 +338,32 @@
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 200; padding: 1rem; }
     .modal-content { background: white; border-radius: 12px; width: 100%; max-width: 460px; padding: 1.5rem; }
 
+    /* 인앱 전용 브라우저 모달 */
+    .inapp-browser-modal {
+      width: 100%;
+      max-width: 520px;
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      overflow: hidden;
+    }
+    .inapp-browser-header {
+      background: #1e293b;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .inapp-browser-frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fafafa;
+    }
+
     /* 상태 표시 바 */
     #systemStatusBar {
       position: fixed;
@@ -360,11 +388,13 @@
 </head>
 <body>
 
+  <!-- 헤더 -->
   <header>
     <div class="school-title">한일고 2학년 3반</div>
     <div id="headerAuth"></div>
   </header>
 
+  <!-- 1. 비로그인 영역 -->
   <div id="authSection" class="auth-container" style="display: none;">
     <div id="loginFormArea">
       <div class="auth-title">2학년 3반 로그인</div>
@@ -403,6 +433,7 @@
     </div>
   </div>
 
+  <!-- 2. 메인 서비스 화면 -->
   <div id="mainServiceSection" style="display: none;">
     <nav>
       <button class="active" onclick="switchTab('board', this)">📢 통합 게시판</button>
@@ -411,11 +442,13 @@
     </nav>
 
     <main>
+      <!-- PWA 앱 설치 유도 배너 -->
       <div id="pwaInstallBanner">
         <span>📲 <strong>한일 2-3 전용 앱</strong>으로 설치하여 편리하게 이용하세요!</span>
         <button class="btn" style="padding:4px 10px; font-size:0.75rem;" onclick="triggerPwaInstall()">앱 설치</button>
       </div>
 
+      <!-- 스토리 영역 -->
       <div class="stories-container">
         <div class="story-item" onclick="openModal('storyModal')">
           <div class="story-ring" style="background:#2563eb;">
@@ -426,6 +459,7 @@
         <div id="storyList" style="display: flex; gap: 1rem;"></div>
       </div>
 
+      <!-- 1. 통합 게시판 탭 -->
       <section id="tab-board" class="tab-view active">
         <div class="board-header">
           <div class="filter-btn-group">
@@ -438,6 +472,7 @@
         <div class="post-list" id="postList"></div>
       </section>
 
+      <!-- 2. 실시간 톡 탭 -->
       <section id="tab-chat" class="tab-view">
         <div class="chat-box">
           <div class="chat-messages" id="chatMessages"></div>
@@ -448,6 +483,7 @@
         </div>
       </section>
 
+      <!-- 3. 학급 캘린더 탭 -->
       <section id="tab-calendar" class="tab-view">
         <div class="calendar-wrap">
           <div class="cal-header">
@@ -470,6 +506,21 @@
     </main>
   </div>
 
+  <!-- 인앱 전용 브라우저 뷰어 모달 -->
+  <div class="modal-backdrop" id="inAppBrowserModal">
+    <div class="modal-content inapp-browser-modal">
+      <div class="inapp-browser-header">
+        <span id="inAppBrowserTitle">인앱 뷰어</span>
+        <div style="display:flex; gap:0.4rem;">
+          <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.75rem;" onclick="openStandalonePopup()">단독 창 열기</button>
+          <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.75rem; color:var(--notice-red);" onclick="closeModal('inAppBrowserModal')">✕ 닫기</button>
+        </div>
+      </div>
+      <iframe id="inAppBrowserFrame" class="inapp-browser-frame" src=""></iframe>
+    </div>
+  </div>
+
+  <!-- 프로필 상세 조회 모달 -->
   <div class="modal-backdrop" id="profileModal" onclick="closeModal('profileModal')">
     <div class="modal-content" onclick="event.stopPropagation()">
       <div style="text-align: center; margin-bottom: 1.2rem;">
@@ -487,6 +538,7 @@
     </div>
   </div>
 
+  <!-- 내 프로필 및 인스타그램 설정 모달 -->
   <div class="modal-backdrop" id="editProfileModal">
     <div class="modal-content">
       <h3 style="margin-bottom:1rem;">내 프로필 설정</h3>
@@ -510,6 +562,7 @@
     </div>
   </div>
 
+  <!-- 새 글 작성 모달 -->
   <div class="modal-backdrop" id="writeModal">
     <div class="modal-content">
       <h3 style="margin-bottom:1rem;" id="writeModalTitle">새 글 작성</h3>
@@ -537,6 +590,7 @@
     </div>
   </div>
 
+  <!-- 게시글 수정 모달 -->
   <div class="modal-backdrop" id="editPostModal">
     <div class="modal-content">
       <h3 style="margin-bottom:1rem;">게시글 수정</h3>
@@ -565,6 +619,7 @@
     </div>
   </div>
 
+  <!-- 캘린더 일정 관리 모달 -->
   <div class="modal-backdrop" id="calendarEventModal">
     <div class="modal-content">
       <h3 style="margin-bottom:0.5rem;" id="calModalDateTitle">일정</h3>
@@ -591,6 +646,7 @@
     </div>
   </div>
 
+  <!-- 스토리 업로드 모달 -->
   <div class="modal-backdrop" id="storyModal">
     <div class="modal-content">
       <h3 style="margin-bottom:1rem;">내 스토리 올리기 (24시간 공유)</h3>
@@ -611,6 +667,7 @@
     </div>
   </div>
 
+  <!-- 스토리 뷰어 모달 -->
   <div class="modal-backdrop" id="storyViewerModal" onclick="closeModal('storyViewerModal')">
     <div class="modal-content" style="max-width:400px; text-align:center; background:#000; color:#fff;" onclick="event.stopPropagation()">
       <div id="storyViewerHeader" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem;"></div>
@@ -633,6 +690,7 @@
     </div>
   </div>
 
+  <!-- 화면 내 상태 표시 바 -->
   <div id="systemStatusBar">
     <div>
       <span class="status-dot" id="statusDot"></span>
@@ -645,6 +703,8 @@
     // 0. 서비스 워커 등록 (PWA 기능 활성화)
     // =========================================================================
     let deferredPrompt = null;
+    let currentInAppUrl = '';
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -751,32 +811,48 @@
     let tempProfilePhotoBase64 = null;
 
     // =========================================================================
-    // 3. 인스타그램 및 일반 링크 포맷 유틸 (스마트 프리뷰 카드 적용)
+    // 3. 인앱 브라우저 및 인스타그램 뷰어 유틸
     // =========================================================================
+    function openInAppBrowser(url, title = "인앱 브라우저") {
+      currentInAppUrl = url;
+      document.getElementById('inAppBrowserTitle').textContent = title;
+      document.getElementById('inAppBrowserFrame').src = url;
+      openModal('inAppBrowserModal');
+    }
+
+    function openStandalonePopup() {
+      if (!currentInAppUrl) return;
+      window.open(
+        currentInAppUrl, 
+        '_blank', 
+        'location=no,menubar=no,toolbar=no,status=no,scrollbars=yes,resizable=yes,width=480,height=720'
+      );
+    }
+
     function formatPostContent(rawText) {
       if (!rawText) return '';
 
       let escaped = escapeHtml(rawText);
 
-      // 인스타그램 URL 감지
+      // 인스타그램 URL 감지 정규식
       const instaRegex = /(https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel|tv)\/([a-zA-Z0-9_\-]+)\/?(?:\S*))/gi;
 
-      escaped = escaped.replace(instaRegex, (match, fullUrl, shortcode) => {
+      escaped = escaped.replace(instaRegex, (match, fullUrl) => {
         return `
-          <div class="insta-smart-card">
-            <div class="insta-card-info">
+          <div class="insta-app-card">
+            <div class="insta-app-card-title">
               <span>📸 Instagram 게시물</span>
             </div>
-            <a href="${fullUrl}" target="_blank" class="insta-link-btn">인스타그램에서 보기 →</a>
+            <button class="insta-app-open-btn" onclick="openInAppBrowser('${fullUrl}', 'Instagram 피드')">앱 내에서 열기 ▶</button>
           </div>
         `;
       });
 
-      // 일반 웹 링크 줄바꿈 처리
+      // 일반 링크 처리
       const generalUrlRegex = /(?<!href=["'])(https?:\/\/[^\s<]+)(?![^<]*>)/gi;
       escaped = escaped.replace(generalUrlRegex, (url) => {
         if (url.includes('instagram.com/p/') || url.includes('instagram.com/reel/')) return url;
-        return `<a href="${url}" target="_blank" class="post-link">${url}</a>`;
+        return `<span class="post-link" onclick="openInAppBrowser('${url}', '웹 뷰어')">${url}</span>`;
       });
 
       return escaped;
@@ -1040,10 +1116,11 @@
 
       const instaArea = document.getElementById('profInstaArea');
       if (prof.instagramHandle) {
+        const instaUrl = `https://instagram.com/${prof.instagramHandle}`;
         instaArea.innerHTML = `
-          <a href="https://instagram.com/${prof.instagramHandle}" target="_blank" class="btn-insta">
+          <button class="btn-insta" onclick="openInAppBrowser('${instaUrl}', '@${prof.instagramHandle} 프로필')">
             <span>📸 Instagram: @${prof.instagramHandle}</span>
-          </a>
+          </button>
         `;
       } else {
         instaArea.innerHTML = '';
@@ -1066,7 +1143,7 @@
     }
 
     // =========================================================================
-    // 8. 통합 게시판 (스마트 링크 + 글 수정/삭제 + 좋아요/댓글)
+    // 8. 통합 게시판 (인앱 브라우저 연동 + 글 수정/삭제 + 좋아요/댓글)
     // =========================================================================
     function openWriteModal(categoryMode = 'free') {
       const isLeader = myProfile.role === '반장' || myProfile.role === '부반장';
@@ -1739,6 +1816,10 @@
     function closeModal(id) {
       document.getElementById(id).style.display = 'none';
       if (id === 'storyViewerModal') currentViewingStory = null;
+      if (id === 'inAppBrowserModal') {
+        document.getElementById('inAppBrowserFrame').src = '';
+        currentInAppUrl = '';
+      }
     }
 
     function escapeHtml(str) {
